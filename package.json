@@ -1,0 +1,32 @@
+{
+  "name": "table-view",
+  "version": "0.1.0",
+  "description": "array table view",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel ./src/index.js -o ./index.js --optional runtime",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruanyl/table-view"
+  },
+  "keywords": [
+    "array table view"
+  ],
+  "author": "Yulong Ruan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ruanyl/table-view/issues"
+  },
+  "homepage": "https://github.com/ruanyl/table-view",
+  "dependencies": {
+    "array-inverse": "^0.1.0",
+    "array-tabular": "^0.1.0",
+    "ava": "0.0.4",
+    "babel-core": "^5.8.25",
+    "babel-runtime": "^5.8.24",
+    "core-js": "^1.1.4"
+  },
+  "devDependencies": {}
+}
