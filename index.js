@@ -15,10 +15,21 @@ var _arrayTabular = require('array-tabular');
 var _arrayTabular2 = _interopRequireDefault(_arrayTabular);
 
 function tableView(arr) {
-  var defaultStyle = { margin: 2 };
+  var sty = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  var defaultStyle = {
+    margin: 2,
+    align: 'right'
+  };
+  defaultStyle = _Object$assign(defaultStyle, sty);
+
   arr = (0, _arrayInverse2['default'])(arr);
   arr = arr.map(function (row) {
-    return (0, _arrayTabular2['default'])(row).before();
+    if (defaultStyle.align === 'right') {
+      return (0, _arrayTabular2['default'])(row).before();
+    } else if (defaultStyle.align === 'left') {
+      return (0, _arrayTabular2['default'])(row).after();
+    }
   });
   arr = (0, _arrayInverse2['default'])(arr);
 
@@ -32,19 +43,8 @@ function tableView(arr) {
     return arr;
   }
 
-  function style() {
-    var sty = arguments.length <= 0 || arguments[0] === undefined ? { margin: 2 } : arguments[0];
-
-    defaultStyle = _Object$assign(defaultStyle, sty);
-
-    return {
-      output: output
-    };
-  }
-
   return {
     get: get,
-    style: style,
     output: output
   };
 }

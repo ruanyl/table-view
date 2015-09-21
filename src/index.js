@@ -2,11 +2,20 @@ import 'core-js/shim';
 import inverse from 'array-inverse';
 import tabular from 'array-tabular';
 
-function tableView(arr) {
-  var defaultStyle = {margin: 2};
+function tableView(arr, sty = {}) {
+  let defaultStyle = {
+    margin: 2,
+    align: 'right'
+  };
+  defaultStyle = Object.assign(defaultStyle, sty);
+
   arr = inverse(arr);
   arr = arr.map((row) => {
-    return tabular(row).before();
+    if (defaultStyle.align === 'right') {
+      return tabular(row).before();
+    } else if (defaultStyle.align === 'left') {
+      return tabular(row).after();
+    }
   });
   arr = inverse(arr);
 
@@ -20,21 +29,10 @@ function tableView(arr) {
     return arr;
   }
 
-  function style(sty = {margin: 2}) {
-    defaultStyle = Object.assign(defaultStyle, sty);
-
-    return {
-      output
-    };
-  }
-
   return {
     get,
-    style,
     output
   };
 }
 
 module.exports = tableView;
-
-

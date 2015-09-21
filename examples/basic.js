@@ -7,4 +7,4 @@ var arr = [
   ['111', '222', '33333333333', '4444'],
   ['111', '222', '333', '444444444444']
 ];
-console.log(tableView(arr).style({margin: 4}).output());
+console.log(tableView(arr, {margin: 4, align: 'left'}).output());
