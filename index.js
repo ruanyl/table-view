@@ -1,7 +1,5 @@
 'use strict';
 
-var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 require('core-js/shim');
@@ -14,59 +12,58 @@ var _arrayTabular = require('array-tabular');
 
 var _arrayTabular2 = _interopRequireDefault(_arrayTabular);
 
-function tableView(arr) {
-  var sty = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-  var defaultStyle = {
-    margin: 2,
-    align: 'right'
-  };
-  defaultStyle = _Object$assign(defaultStyle, sty);
-  var hasHeader = defaultStyle.header !== undefined ? true : false;
+function tableView(arr, _ref) {
+  var _ref$margin = _ref.margin;
+  var margin = _ref$margin === undefined ? 2 : _ref$margin;
+  var _ref$align = _ref.align;
+  var align = _ref$align === undefined ? 'right' : _ref$align;
+  var _ref$header = _ref.header;
+  var header = _ref$header === undefined ? '' : _ref$header;
+  var _ref$borderTop = _ref.borderTop;
+  var borderTop = _ref$borderTop === undefined ? '' : _ref$borderTop;
+  var _ref$borderRight = _ref.borderRight;
+  var borderRight = _ref$borderRight === undefined ? '' : _ref$borderRight;
+  var _ref$borderBottom = _ref.borderBottom;
+  var borderBottom = _ref$borderBottom === undefined ? '' : _ref$borderBottom;
+  var _ref$borderLeft = _ref.borderLeft;
+  var borderLeft = _ref$borderLeft === undefined ? '' : _ref$borderLeft;
 
   arr = (0, _arrayInverse2['default'])(arr);
   arr = arr.map(function (row) {
-    if (defaultStyle.align === 'right') {
+    if (align === 'right') {
       return (0, _arrayTabular2['default'])(row).before();
-    } else if (defaultStyle.align === 'left') {
+    } else if (align === 'left') {
       return (0, _arrayTabular2['default'])(row).after();
     }
   });
   arr = (0, _arrayInverse2['default'])(arr);
 
-  /*if(hasHeader) {
-    let headerArr = arr[0].map((ele) => {
-      return '-'.repeat(ele.length);
-    });
-    arr.splice(1, 0, headerArr);
-  }*/
-
   function output() {
     var result = arr.reduce(function (tmpResult, row, rowNum) {
-      var rowOutput = row.join(' '.repeat(defaultStyle.margin));
-      var borderTop = '';
-      var borderBottom = '';
-      var header = '';
+      var rowOutput = row.join(' '.repeat(margin));
+      var borderTopStr = '';
+      var borderBottomStr = '';
+      var headerStr = '';
 
-      if (defaultStyle.borderLeft) {
-        rowOutput = defaultStyle.borderLeft + ' ' + rowOutput;
+      if (borderLeft) {
+        rowOutput = borderLeft + ' ' + rowOutput;
       }
-      if (defaultStyle.borderRight) {
-        rowOutput = rowOutput + ' ' + defaultStyle.borderRight;
+      if (borderRight) {
+        rowOutput = rowOutput + ' ' + borderRight;
       }
       tmpResult = tmpResult + '\n' + rowOutput;
 
-      if (defaultStyle.borderTop && rowNum === 0) {
-        borderTop = defaultStyle.borderTop.repeat(rowOutput.length);
-        tmpResult = borderTop + tmpResult;
+      if (borderTop && rowNum === 0) {
+        borderTopStr = borderTop.repeat(rowOutput.length);
+        tmpResult = borderTopStr + tmpResult;
       }
-      if (hasHeader && rowNum === 0) {
-        header = defaultStyle.borderLeft + '-'.repeat(rowOutput.length - 2) + defaultStyle.borderRight;
-        tmpResult = tmpResult + '\n' + header;
+      if (header && rowNum === 0) {
+        headerStr = borderLeft + '-'.repeat(rowOutput.length - 2) + borderRight;
+        tmpResult = tmpResult + '\n' + headerStr;
       }
-      if (defaultStyle.borderBottom && rowNum === arr.length - 1) {
-        borderBottom = defaultStyle.borderBottom.repeat(rowOutput.length);
-        tmpResult = tmpResult + '\n' + borderBottom;
+      if (borderBottom && rowNum === arr.length - 1) {
+        borderBottomStr = borderBottom.repeat(rowOutput.length);
+        tmpResult = tmpResult + '\n' + borderBottomStr;
       }
       return tmpResult;
     }, '');

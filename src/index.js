@@ -2,19 +2,21 @@ import 'core-js/shim';
 import inverse from 'array-inverse';
 import tabular from 'array-tabular';
 
-function tableView(arr, sty = {}) {
-  let defaultStyle = {
-    margin: 2,
-    align: 'right'
-  };
-  defaultStyle = Object.assign(defaultStyle, sty);
-  let hasHeader = defaultStyle.header !== undefined ? true : false;
+function tableView(arr, {
+  margin = 2,
+  align = 'right',
+  header = '',
+  borderTop = '',
+  borderRight = '',
+  borderBottom = '',
+  borderLeft = ''
+}) {
 
   arr = inverse(arr);
   arr = arr.map((row) => {
-    if (defaultStyle.align === 'right') {
+    if (align === 'right') {
       return tabular(row).before();
-    } else if (defaultStyle.align === 'left') {
+    } else if (align === 'left') {
       return tabular(row).after();
     }
   });
@@ -22,30 +24,30 @@ function tableView(arr, sty = {}) {
 
   function output() {
     let result = arr.reduce((tmpResult, row, rowNum) => {
-      let rowOutput = row.join(' '.repeat(defaultStyle.margin));
-      let borderTop = '';
-      let borderBottom = '';
-      let header = '';
+      let rowOutput = row.join(' '.repeat(margin));
+      let borderTopStr = '';
+      let borderBottomStr = '';
+      let headerStr = '';
 
-      if(defaultStyle.borderLeft) {
-        rowOutput = defaultStyle.borderLeft + ' ' + rowOutput;
+      if (borderLeft) {
+        rowOutput = borderLeft + ' ' + rowOutput;
       }
-      if(defaultStyle.borderRight) {
-        rowOutput = rowOutput + ' ' + defaultStyle.borderRight;
+      if (borderRight) {
+        rowOutput = rowOutput + ' ' + borderRight;
       }
       tmpResult = tmpResult + '\n' + rowOutput;
 
-      if(defaultStyle.borderTop && rowNum === 0) {
-        borderTop = defaultStyle.borderTop.repeat(rowOutput.length);
-        tmpResult = borderTop + tmpResult;
+      if (borderTop && rowNum === 0) {
+        borderTopStr = borderTop.repeat(rowOutput.length);
+        tmpResult = borderTopStr + tmpResult;
       }
-      if(hasHeader && rowNum === 0) {
-        header = defaultStyle.borderLeft + '-'.repeat(rowOutput.length - 2) + defaultStyle.borderRight;
-        tmpResult = tmpResult + '\n' + header;
+      if (header && rowNum === 0) {
+        headerStr = borderLeft + '-'.repeat(rowOutput.length - 2) + borderRight;
+        tmpResult = tmpResult + '\n' + headerStr;
       }
-      if(defaultStyle.borderBottom && rowNum === (arr.length - 1)) {
-        borderBottom = defaultStyle.borderBottom.repeat(rowOutput.length);
-        tmpResult = tmpResult + '\n' + borderBottom;
+      if (borderBottom && rowNum === (arr.length - 1)) {
+        borderBottomStr = borderBottom.repeat(rowOutput.length);
+        tmpResult = tmpResult + '\n' + borderBottomStr;
       }
       return tmpResult;
     }, '');
