@@ -22,6 +22,7 @@ function tableView(arr) {
     align: 'right'
   };
   defaultStyle = _Object$assign(defaultStyle, sty);
+  var hasHeader = defaultStyle.header !== undefined ? true : false;
 
   arr = (0, _arrayInverse2['default'])(arr);
   arr = arr.map(function (row) {
@@ -34,8 +35,14 @@ function tableView(arr) {
   arr = (0, _arrayInverse2['default'])(arr);
 
   function output() {
+    var isHeader = hasHeader;
     return arr.map(function (row) {
-      return row.join(' '.repeat(defaultStyle.margin));
+      var rowOutput = row.join(' '.repeat(defaultStyle.margin));
+      if (isHeader) {
+        rowOutput = rowOutput + '\n' + '-'.repeat(rowOutput.length);
+        isHeader = false;
+      }
+      return rowOutput;
     }).join('\n');
   }
 

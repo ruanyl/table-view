@@ -8,6 +8,7 @@ function tableView(arr, sty = {}) {
     align: 'right'
   };
   defaultStyle = Object.assign(defaultStyle, sty);
+  let hasHeader = defaultStyle.header !== undefined ? true : false;
 
   arr = inverse(arr);
   arr = arr.map((row) => {
@@ -20,8 +21,14 @@ function tableView(arr, sty = {}) {
   arr = inverse(arr);
 
   function output() {
+    let isHeader = hasHeader;
     return arr.map((row) => {
-      return row.join(' '.repeat(defaultStyle.margin));
+      let rowOutput = row.join(' '.repeat(defaultStyle.margin));
+      if(isHeader) { // if it is the first row of the array
+        rowOutput = rowOutput + '\n' + '-'.repeat(rowOutput.length);
+        isHeader = false;
+      }
+      return rowOutput;
     }).join('\n');
   }
 
