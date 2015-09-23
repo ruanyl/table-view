@@ -34,16 +34,37 @@ function tableView(arr) {
   });
   arr = (0, _arrayInverse2['default'])(arr);
 
+  if (hasHeader) {
+    var headerArr = arr[0].map(function (ele) {
+      return '-'.repeat(ele.length);
+    });
+    arr.splice(1, 0, headerArr);
+  }
+
   function output() {
-    var isHeader = hasHeader;
-    return arr.map(function (row) {
-      var rowOutput = row.join(' '.repeat(defaultStyle.margin));
-      if (isHeader) {
-        rowOutput = rowOutput + '\n' + '-'.repeat(rowOutput.length);
-        isHeader = false;
+    var result = '';
+    var arrOutput = arr.map(function (row, rowNum) {
+      var rowOutput = hasHeader && rowNum === 1 ? row.join('-'.repeat(defaultStyle.margin)) : row.join(' '.repeat(defaultStyle.margin));
+
+      if (defaultStyle.borderLeft) {
+        rowOutput = defaultStyle.borderLeft + ' ' + rowOutput;
+      }
+
+      if (defaultStyle.borderRight) {
+        rowOutput = rowOutput + ' ' + defaultStyle.borderRight;
       }
       return rowOutput;
-    }).join('\n');
+    });
+    result = arrOutput.join('\n');
+
+    if (defaultStyle.borderTop) {
+      result = defaultStyle.borderTop.repeat(arrOutput[0].length) + '\n' + result;
+    }
+    if (defaultStyle.borderBottom) {
+      result = result + '\n' + defaultStyle.borderBottom.repeat(arrOutput[0].length);
+    }
+
+    return result;
   }
 
   function get() {

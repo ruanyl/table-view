@@ -20,16 +20,39 @@ function tableView(arr, sty = {}) {
   });
   arr = inverse(arr);
 
+  if(hasHeader) {
+    let headerArr = arr[0].map((ele) => {
+      return '-'.repeat(ele.length);
+    });
+    arr.splice(1, 0, headerArr);
+  }
+
   function output() {
-    let isHeader = hasHeader;
-    return arr.map((row) => {
-      let rowOutput = row.join(' '.repeat(defaultStyle.margin));
-      if(isHeader) { // if it is the first row of the array
-        rowOutput = rowOutput + '\n' + '-'.repeat(rowOutput.length);
-        isHeader = false;
+    let result = '';
+    let arrOutput = arr.map((row, rowNum) => {
+      let rowOutput = hasHeader && rowNum === 1 ?
+        row.join('-'.repeat(defaultStyle.margin)) :
+        row.join(' '.repeat(defaultStyle.margin));
+
+      if(defaultStyle.borderLeft) {
+        rowOutput = defaultStyle.borderLeft + ' ' + rowOutput;
+      }
+
+      if(defaultStyle.borderRight) {
+        rowOutput = rowOutput + ' ' + defaultStyle.borderRight;
       }
       return rowOutput;
-    }).join('\n');
+    });
+    result = arrOutput.join('\n');
+
+    if(defaultStyle.borderTop) {
+      result = defaultStyle.borderTop.repeat(arrOutput[0].length) + '\n' + result;
+    }
+    if(defaultStyle.borderBottom) {
+      result = result + '\n' + defaultStyle.borderBottom.repeat(arrOutput[0].length);
+    }
+
+    return result;
   }
 
   function get() {
