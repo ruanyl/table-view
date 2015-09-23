@@ -20,37 +20,35 @@ function tableView(arr, sty = {}) {
   });
   arr = inverse(arr);
 
-  if(hasHeader) {
-    let headerArr = arr[0].map((ele) => {
-      return '-'.repeat(ele.length);
-    });
-    arr.splice(1, 0, headerArr);
-  }
-
   function output() {
-    let result = '';
-    let arrOutput = arr.map((row, rowNum) => {
-      let rowOutput = hasHeader && rowNum === 1 ?
-        row.join('-'.repeat(defaultStyle.margin)) :
-        row.join(' '.repeat(defaultStyle.margin));
+    let result = arr.reduce((tmpResult, row, rowNum) => {
+      let rowOutput = row.join(' '.repeat(defaultStyle.margin));
+      let borderTop = '';
+      let borderBottom = '';
+      let header = '';
 
       if(defaultStyle.borderLeft) {
         rowOutput = defaultStyle.borderLeft + ' ' + rowOutput;
       }
-
       if(defaultStyle.borderRight) {
         rowOutput = rowOutput + ' ' + defaultStyle.borderRight;
       }
-      return rowOutput;
-    });
-    result = arrOutput.join('\n');
+      tmpResult = tmpResult + '\n' + rowOutput;
 
-    if(defaultStyle.borderTop) {
-      result = defaultStyle.borderTop.repeat(arrOutput[0].length) + '\n' + result;
-    }
-    if(defaultStyle.borderBottom) {
-      result = result + '\n' + defaultStyle.borderBottom.repeat(arrOutput[0].length);
-    }
+      if(defaultStyle.borderTop && rowNum === 0) {
+        borderTop = defaultStyle.borderTop.repeat(rowOutput.length);
+        tmpResult = borderTop + tmpResult;
+      }
+      if(hasHeader && rowNum === 0) {
+        header = defaultStyle.borderLeft + '-'.repeat(rowOutput.length - 2) + defaultStyle.borderRight;
+        tmpResult = tmpResult + '\n' + header;
+      }
+      if(defaultStyle.borderBottom && rowNum === (arr.length - 1)) {
+        borderBottom = defaultStyle.borderBottom.repeat(rowOutput.length);
+        tmpResult = tmpResult + '\n' + borderBottom;
+      }
+      return tmpResult;
+    }, '');
 
     return result;
   }
