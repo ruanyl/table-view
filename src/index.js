@@ -1,6 +1,7 @@
 import 'core-js/shim';
 import inverse from 'array-inverse';
 import tabular from 'array-tabular';
+import chalk from 'chalk';
 
 function tableView(arr, {
   margin = 2,
@@ -23,36 +24,23 @@ function tableView(arr, {
   arr = inverse(arr);
 
   function output() {
-    let result = arr.reduce((tmpResult, row, rowNum) => {
-      let rowOutput = row.join(' '.repeat(margin));
-      let borderTopStr = '';
-      let borderBottomStr = '';
-      let headerStr = '';
-
-      if (borderLeft) {
-        rowOutput = borderLeft + ' ' + rowOutput;
-      }
-      if (borderRight) {
-        rowOutput = rowOutput + ' ' + borderRight;
-      }
-      tmpResult = tmpResult + '\n' + rowOutput;
-
+    let result = arr.map((row) => {
+      return ' ' + row.join(' '.repeat(margin)) + ' ';
+    }).reduce((tmpResult, row, rowNum) => {
       if (borderTop && rowNum === 0) {
-        borderTopStr = borderTop.repeat(rowOutput.length);
-        tmpResult = borderTopStr + tmpResult;
+        tmpResult.push(borderLeft + borderTop.repeat(row.length) + borderRight);
       }
+      tmpResult.push(borderLeft + row + borderRight);
       if (header && rowNum === 0) {
-        headerStr = borderLeft + '-'.repeat(rowOutput.length - 2) + borderRight;
-        tmpResult = tmpResult + '\n' + headerStr;
+        tmpResult.push(borderLeft + '-'.repeat(row.length) + borderRight);
       }
       if (borderBottom && rowNum === (arr.length - 1)) {
-        borderBottomStr = borderBottom.repeat(rowOutput.length);
-        tmpResult = tmpResult + '\n' + borderBottomStr;
+        tmpResult.push(borderLeft + borderBottom.repeat(row.length) + borderRight);
       }
       return tmpResult;
-    }, '');
+    }, []);
 
-    return result;
+    return result.join('\n');
   }
 
   function get() {

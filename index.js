@@ -12,6 +12,10 @@ var _arrayTabular = require('array-tabular');
 
 var _arrayTabular2 = _interopRequireDefault(_arrayTabular);
 
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
+
 function tableView(arr, _ref) {
   var _ref$margin = _ref.margin;
   var margin = _ref$margin === undefined ? 2 : _ref$margin;
@@ -39,36 +43,23 @@ function tableView(arr, _ref) {
   arr = (0, _arrayInverse2['default'])(arr);
 
   function output() {
-    var result = arr.reduce(function (tmpResult, row, rowNum) {
-      var rowOutput = row.join(' '.repeat(margin));
-      var borderTopStr = '';
-      var borderBottomStr = '';
-      var headerStr = '';
-
-      if (borderLeft) {
-        rowOutput = borderLeft + ' ' + rowOutput;
-      }
-      if (borderRight) {
-        rowOutput = rowOutput + ' ' + borderRight;
-      }
-      tmpResult = tmpResult + '\n' + rowOutput;
-
+    var result = arr.map(function (row) {
+      return ' ' + row.join(' '.repeat(margin)) + ' ';
+    }).reduce(function (tmpResult, row, rowNum) {
       if (borderTop && rowNum === 0) {
-        borderTopStr = borderTop.repeat(rowOutput.length);
-        tmpResult = borderTopStr + tmpResult;
+        tmpResult.push(borderLeft + borderTop.repeat(row.length) + borderRight);
       }
+      tmpResult.push(borderLeft + row + borderRight);
       if (header && rowNum === 0) {
-        headerStr = borderLeft + '-'.repeat(rowOutput.length - 2) + borderRight;
-        tmpResult = tmpResult + '\n' + headerStr;
+        tmpResult.push(borderLeft + '-'.repeat(row.length) + borderRight);
       }
       if (borderBottom && rowNum === arr.length - 1) {
-        borderBottomStr = borderBottom.repeat(rowOutput.length);
-        tmpResult = tmpResult + '\n' + borderBottomStr;
+        tmpResult.push(borderLeft + borderBottom.repeat(row.length) + borderRight);
       }
       return tmpResult;
-    }, '');
+    }, []);
 
-    return result;
+    return result.join('\n');
   }
 
   function get() {
